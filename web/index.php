@@ -61,7 +61,7 @@ class tarot {
             $count = mb_ereg_replace('tarot:', '', $count);
             $count = (int) substr($count, 0,1);
 
-            return $this->get_tarot($count);
+            return $count;
         } else {
             return $message;
         }
