@@ -73,7 +73,7 @@ class tarot {
 
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
-        // $str_number = preg_replace('<center>您的編號是: ', '', $str_number);
+        $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
 
         // $sn = 26713693;
         // $url_api = "http://tarot.keepfight.net/see.php?sn=".$sn;
