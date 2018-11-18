@@ -63,7 +63,7 @@ class tarot {
 
             return $this->get_tarot($count);
         } else {
-            return null;
+            return $message;
         }
     }
 
