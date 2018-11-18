@@ -57,7 +57,7 @@ foreach ($client->parseEvents() as $event) {
 class tarot {
     function is_tarot_message($message) {
         if(preg_match('/tarot:[0-5]/', $message) ) {
-            $count = mb_ereg_replace('tarot:', '', $count);
+            $count = mb_ereg_replace('tarot:', '', $message);
             $count = substr($count, 0,1);
 
             return '參數正確:'.$count;
