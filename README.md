@@ -1,26 +1,14 @@
-# linebot-php-heroku-framework
+# linebot-php-practice
+
+orign sample form [CHY0919](https://github.com/CHY0919/linebot-php-heroku-framework)
 
 a tiny PHP framework to deploy your linebot on heroku
 
-just comebine the [heroku/php-getting-started](https://github.com/heroku/php-getting-started) and [linebot-php-sdk](https://github.com/line/line-bot-sdk-php)
+See detail with picture at [www.chy.tw](http://www.chy.tw/2017/08/phpherokulinebot.html).
 
 ## Getting Started
 
-1.Register linebot service [lineservice](https://business.line.me/services/bot).
 
-2.Turn on the [bot service](https://admin-official.line.me/) .
-
-3.Enable Webhook sending and disable auto-sending setting.
-
-4.Remember your ChannelSecret and issued ChannelAccessToken as parameters.
-
-5.Deploy your linebot with the under button.
-
-6.Fill Webhook URL in developers page with 	https://[your app name].herokuapp.com:443/callback
-
-7.Done.
-
-See detail with picture at [my web](http://www.chy.tw/2017/08/phpherokulinebot.html).
 
 ## License
 
