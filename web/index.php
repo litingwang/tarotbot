@@ -59,11 +59,11 @@ class tarot {
         if(preg_match('/tarot:[0-5]/', $message) ) {
             $count = strstr($message, 'tarot:');
             $count = mb_ereg_replace('tarot:', '', $count);
-            $count = (int) substr($count, 0,1);
+            $count = substr($count, 0,1);
 
-            return '參數正確';
+            return '參數正確:'.$count;
         } else {
-            return $message;
+            return '參數錯誤:'.$message;
         }
     }
 
