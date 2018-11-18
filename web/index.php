@@ -91,3 +91,4 @@ class tarot {
         // }
         return "http://tarot.keepfight.net/see.php?sn=".$str_number;
     }
+}
