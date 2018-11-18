@@ -68,12 +68,12 @@ class tarot {
 
     function get_tarot($count) {
         $this->curl = new Curl();
-        $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
-        $output = $this->curl->curl_get($url_api);
+        // $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
+        // $output = $this->curl->curl_get($url_api);
 
-        $str_number = strstr($output, '<center>');
-        $str_number = strstr($str_number, '</center>',true);
-        $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
+        // $str_number = strstr($output, '<center>');
+        // $str_number = strstr($str_number, '</center>',true);
+        // $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
         // echo $str_number;
         // $r = strstr($output, '<form>');
         // $r = strstr($r, '</form>',true);
@@ -89,6 +89,25 @@ class tarot {
         //         $message .= $value." ";
         //     }
         // }
-        return "http://tarot.keepfight.net/see.php?sn=".$str_number;
+
+
+        $sn = 26713693;
+        $url_api = "http://tarot.keepfight.net/see.php?sn=".$sn;
+        $output =  $this->curl->curl_get($url_api);
+
+        $r = strstr($output, '<form>');
+        $r = strstr($r, '</form>',true);
+        $r = str_replace('<form><input type="hidden" name="copy_card" value="', '', $r);
+        $r = str_replace(' ">', '', $r);
+        $r = str_replace('（正）', '(+)', $r);
+        $r = str_replace('（逆）', '(-)', $r);
+        $arr_r = preg_split("/[\s,]+/", $r);
+        $message = '';
+        foreach ($arr_r as $key => $value) {
+            if(!preg_match("/^N\/A/", $value)) {
+                $message.= $value." ";
+            }
+        }
+        return $message;
     }
 }
