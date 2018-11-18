@@ -57,10 +57,10 @@ foreach ($client->parseEvents() as $event) {
 class tarot {
     function is_tarot_message($message) {
         if(preg_match('/tarot:[0-5]/', $message) ) {
-            $count = mb_ereg_replace('tarot:', '', $message);
+            $count = preg_replace('/tarot:/', '', $message);
             $count = substr($count, 0,1);
 
-            return '參數正確:'.$count;
+            return $this->get_tarot($count);
         } else {
             return '參數錯誤:'.$message;
         }
@@ -73,7 +73,7 @@ class tarot {
 
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
-        $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
+        $str_number = preg_replace('<center>您的編號是: ', '', $str_number);
         
 
         $message = $str_number;
