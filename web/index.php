@@ -24,13 +24,14 @@ $channelAccessToken = getenv('LINE_CHANNEL_ACCESSTOKEN');
 $channelSecret = getenv('LINE_CHANNEL_SECRET');
 
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
+$tarot = new tarot;
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                	$m_message = $message['text'];
+                	$m_message = $tarot->is_tarot_message( $message['text'] );
                 	if($m_message!="")
                 	{
                 		$client->replyMessage(array(
@@ -52,3 +53,32 @@ foreach ($client->parseEvents() as $event) {
             break;
     }
 };
+
+class tarot {
+    function is_tarot_message($message) {
+        if(preg_match('/tarot:[0-5]/', $message) ) {
+            $count = strstr($message, 'tarot:');
+            $count = mb_ereg_replace('tarot:', '', $count);
+            $count = (int) substr($count, 0,1);
+
+            return $this->get_tarot($count);
+        } else {
+            return null;
+        }
+    }
+
+    function get_tarot($count) {
+        $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
+        $this->load->library('curl');
+        $output =  $this->curl->simple_get($url_api);
+
+        $str_number = strstr($output, '<center>');
+        $str_number = strstr($str_number, '</center>',true);
+        $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
+        
+
+        $message = 'http://tarot.keepfight.net/see.php?sn='.$str_number;
+        return $message;
+    }
+
+}
