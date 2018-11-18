@@ -92,6 +92,6 @@ class tarot {
         //         $message.= $value." ";
         //     }
         // }
-        return "http://tarot.keepfight.net/see.php?sn=".$str_number;
+        return "您的編號是:".$str_number;
     }
 }
