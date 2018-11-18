@@ -16,8 +16,6 @@ just comebine the [heroku/php-getting-started](https://github.com/heroku/php-get
 
 5.Deploy your linebot with the under button.
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 6.Fill Webhook URL in developers page with 	https://[your app name].herokuapp.com:443/callback
 
 7.Done.
