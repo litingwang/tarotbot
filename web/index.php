@@ -17,7 +17,7 @@
  */
 
 require_once('./LINEBotTiny.php');
-
+use \Curl\Curl;
 
 
 $channelAccessToken = getenv('LINE_CHANNEL_ACCESSTOKEN');
@@ -60,16 +60,18 @@ class tarot {
             $count = preg_replace('/tarot:/', '', $message);
             $count = substr($count, 0,1);
 
-            return $count;
+            return $this->get_tarot($count);
         } else {
             return '參數錯誤:'.$message;
         }
     }
 
     function get_tarot($count) {
-        $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
-        $this->load->library('curl');
-        $output =  $this->curl->simple_get($url_api);
+        $curl = new Curl();
+        $url_api = "http://www.tarot.keepfight.net/card.php".$count;
+        $curl->get($url_api);
+        $output =  $curl->response;
+        $curl->close();
 
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
