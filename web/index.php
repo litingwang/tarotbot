@@ -68,7 +68,7 @@ class tarot {
 
     function get_tarot($count) {
         $curl = new Curl();
-        $url_api = "http://www.tarot.keepfight.net/card.php".$count;
+        $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
         $curl->get($url_api);
         $output =  $curl->response;
         $curl->close();
