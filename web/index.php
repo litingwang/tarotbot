@@ -77,7 +77,7 @@ class tarot {
         $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
         
 
-        $message = 'http://tarot.keepfight.net/see.php?sn='.$str_number;
+        $message = $str_number;
         return $message;
     }
 
