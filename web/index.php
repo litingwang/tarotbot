@@ -58,9 +58,9 @@ class tarot {
     function is_tarot_message($message) {
         if(preg_match('/tarot:[0-5]/', $message) ) {
             $count = preg_replace('/tarot:/', '', $message);
-            $count = substr($count, 0,1);
+            //$count = substr($count, 0,1);
 
-            return $this->get_tarot($count);
+            return $count;
         } else {
             return '參數錯誤:'.$message;
         }
