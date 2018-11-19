@@ -121,9 +121,9 @@ class tarot {
         $arr_message = array(
             '問卜者的心態：',
             'A 的前期狀況：',
-            'A 的結果：',
+            'A 的結果：　　',
             'B 的前期狀況：',
-            'B 的結果：'
+            'B 的結果：　　'
         );
 
         $message = '';
