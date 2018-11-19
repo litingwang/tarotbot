@@ -147,6 +147,6 @@ x.execCommand("Copy");
             }
         }
         
-        return  $message."\n http://tarot.keepfight.net/see.php?sn=".$str_number;
+        return  $message."\n ".$str_number;
     }
 }
