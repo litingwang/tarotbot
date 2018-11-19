@@ -55,18 +55,23 @@ foreach ($client->parseEvents() as $event) {
 };
 
 class tarot {
-    function is_tarot_message($message) {
+    public function is_tarot_message($message) {
         if(preg_match('/tarot:[1-9]$/', $message) ) {
-            $count = preg_replace('/tarot:/', '', $message);
-            $count = substr($count, 0,1);
+            $count = (int) substr($message, -1);
 
             return $this->get_tarot($count);
-        } else {
+        } elseif (preg_match('/tarot:help$/', $message)) {
+            $message = "請輸入tarot:1(張數)\n牌數範圍為1~9\n二擇一占卜請輸入tarot:choices";
+            return $message;
+        } elseif(preg_match('/tarot:choices$/', $message)) {
+            return $this->get_choices();
+        }
+         else {
             return false;
         }
     }
 
-    function get_tarot($count) {
+    public function get_tarot($count) {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
         $output = $this->curl->curl_get($url_api);
@@ -89,9 +94,9 @@ class tarot {
             if (!preg_match("/^N\/A/", $value)) {
 
                 if($count <= 3) {
-                    $message .= $card_count .":".$value." ";
+                    $message .= $card_count .": ".$value." ";
                 } else {
-                    $message .= $card_count .":".$value." \n";
+                    $message .= $card_count .": ".$value." \n";
                 }
 
                 $card_count = $card_count+1;
@@ -99,5 +104,36 @@ class tarot {
         }
         
         return  $message." \nhttp://tarot.keepfight.net/see.php?sn=".$str_number;
+    }
+
+    public function get_choices() {
+        $this->curl = new Curl();
+        $url_api = "http://www.tarot.keepfight.net/card.php?d=5";
+        $output = $this->curl->curl_get($url_api);
+
+        $r = strstr($output, '<input type="hidden" name="copy_card" value="');
+        $r = strstr($r, '</form>',true);
+        $r = str_replace('<input type="hidden" name="copy_card" value="', '', $r);
+        $r = preg_replace('/\s">[\s]*/', '', $r);
+        $r = str_replace('（正）', '(+)', $r);
+        $r = str_replace('（逆）', '(-)', $r);
+        $arr_r = preg_split("/[\s,]+/", $r);
+        $arr_message = array(
+            '問卜者的心態：',
+            'A 的前期狀況：',
+            'A 的結果：',
+            'B 的前期狀況：',
+            'B 的結果：'
+        );
+
+        $message = '';
+        $card_count = 0;
+        foreach ($arr_r as $key => $value) {
+            if (!preg_match("/^N\/A/", $value)) {
+                $message .= $arr_message[$card_count] .$value." \n";
+                $card_count = $card_count+1;
+            }
+        }
+
     }
 }
