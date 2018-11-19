@@ -147,6 +147,6 @@ x.execCommand("Copy");
             }
         }
         
-        return  $message."\n ".$str_number;
+        return  $message." ".$str_number;
     }
 }
