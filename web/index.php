@@ -130,7 +130,7 @@ x.execCommand("Copy");
 </html>';
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
-        $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
+        $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
 
         $r = strstr($output, '<input type="hidden" name="copy_card" value="');
         $r = strstr($r, '</form>',true);
