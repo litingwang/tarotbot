@@ -56,7 +56,7 @@ foreach ($client->parseEvents() as $event) {
 
 class tarot {
     function is_tarot_message($message) {
-        if(preg_match('/tarot:[1-9]/', $message) ) {
+        if(preg_match('/tarot:[1-9]$/', $message) ) {
             $count = preg_replace('/tarot:/', '', $message);
             $count = substr($count, 0,1);
 
@@ -84,9 +84,17 @@ class tarot {
         $arr_r = preg_split("/[\s,]+/", $r);
 
         $message = '';
+        $card_count = 1;
         foreach ($arr_r as $key => $value) {
-            if(!preg_match("/^N\/A/", $value)) {
-                $message .= $value." ";
+            if (!preg_match("/^N\/A/", $value)) {
+
+                if($count <= 3) {
+                    $message .= $card_count .":".$value." ";
+                } else {
+                    $message .= $card_count .":".$value." \n";
+                }
+
+                $card_count = $card_count+1;
             }
         }
         
