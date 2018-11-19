@@ -121,9 +121,9 @@ class tarot {
         $arr_message = array(
             '問卜者的心態：',
             'A 的前期狀況：',
-            'A 的結果　　：',
+            'A 的結果：',
             'B 的前期狀況：',
-            'B 的結果　　：'
+            'B 的結果：'
         );
 
         $message = '';
@@ -131,6 +131,9 @@ class tarot {
         foreach ($arr_r as $key => $value) {
             if (!preg_match("/^N\/A/", $value)) {
                 $message .= $arr_message[$card_count] .$value." \n";
+                if($card_count ==2) {
+                    $message .="\n";
+                }
                 $card_count = $card_count+1;
             }
         }
