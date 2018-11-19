@@ -56,7 +56,7 @@ foreach ($client->parseEvents() as $event) {
 
 class tarot {
     function is_tarot_message($message) {
-        if(preg_match('/tarot:[0-5]/', $message) ) {
+        if(preg_match('/tarot:[1-9]/', $message) ) {
             $count = preg_replace('/tarot:/', '', $message);
             $count = substr($count, 0,1);
 
