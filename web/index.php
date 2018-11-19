@@ -134,6 +134,6 @@ class tarot {
                 $card_count = $card_count+1;
             }
         }
-
+        return $message;
     }
 }
