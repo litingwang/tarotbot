@@ -69,65 +69,8 @@ class tarot {
     function get_tarot($count) {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
-        // $output = $this->curl->curl_get($url_api);
+        $output = $this->curl->curl_get($url_api);
 
-        $output = '<html>
-    <head>
-        <title>Tarot</title>
-        <meta http-equiv="cache-control" content="no-cache">
-        <meta http-equiv="pragma" content="no-cache">
-        <meta http-equiv="expires" content="0">
-        <style type="text/css">
-            <!--
-.draw { float:left; padding: 10px; width:120px; text-align: center; }
--->
-        </style>
-    </head>
-    <body>
-        <table align="center" cellspacing="1">
-            <tr>
-                <td bgcolor="#FFFFFF">
-                    <div class=\'draw\'>
-                        <img src=\'pic/m00.jpg\' alt=\'\'/>愚人（正）
-                    </div>
-                    <div class=\'draw\'>
-                        <img src=\'pic/s03.jpg\' alt=\'\'/>劍三（正）
-                    </div>
-                    <div class=\'draw\'>
-                        <img src=\'pic/xm01.jpg\' alt=\'\'/>魔術師（逆）
-                    </div>
-                    <div class=\'draw\'>
-                        <img src=\'pic/xs08.jpg\' alt=\'\'/>劍八（逆）
-                    </div>
-                    <div class=\'draw\'>
-                        <img src=\'pic/xc06.jpg\' alt=\'\'/>杯六（逆）
-                    </div>
-                </td>
-            </tr>
-            <form>
-                <input type="hidden" name="copy_card" value="愚人（正） 劍三（正） 魔術師（逆） 劍八（逆） 杯六（逆） ">
-            </form>
-            <center>您的編號是: 26774021</center>
-            <script>
-x = document.all.copy_card.createTextRange();
-x.execCommand("Copy");
-</script>
-            <tr>
-                <td>
-                    <div align="center">
-                        <a href="javascript:this.location.reload()" target="_self">
-                            <img src="pic/reload.gif" width="280" height="80" border="0" align="absmiddle">
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <div align="center" style="color:#AAAAAA;">Ps: 如果您是使用 Internet Explorer, 此網址已經自動置入剪貼簿當中囉!
-            <br />
-將可在軟體中直接使用 Ctrl+V 貼上即可!
-        </div>
-    </body>
-</html>';
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
         $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
