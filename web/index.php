@@ -32,7 +32,7 @@ foreach ($client->parseEvents() as $event) {
             switch ($message['type']) {
                 case 'text':
                 	$m_message = $tarot->is_tarot_message( $message['text'] );
-                	if($m_message!="")
+                	if($m_message != false)
                 	{
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
@@ -62,36 +62,91 @@ class tarot {
 
             return $this->get_tarot($count);
         } else {
-            return '參數錯誤:'.$message;
+            return false;
         }
     }
 
     function get_tarot($count) {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
-        $output = $this->curl->curl_get($url_api);
+        // $output = $this->curl->curl_get($url_api);
 
+        $output = '<html>
+    <head>
+        <title>Tarot</title>
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="pragma" content="no-cache">
+        <meta http-equiv="expires" content="0">
+        <style type="text/css">
+            <!--
+.draw { float:left; padding: 10px; width:120px; text-align: center; }
+-->
+        </style>
+    </head>
+    <body>
+        <table align="center" cellspacing="1">
+            <tr>
+                <td bgcolor="#FFFFFF">
+                    <div class=\'draw\'>
+                        <img src=\'pic/m00.jpg\' alt=\'\'/>愚人（正）
+                    </div>
+                    <div class=\'draw\'>
+                        <img src=\'pic/s03.jpg\' alt=\'\'/>劍三（正）
+                    </div>
+                    <div class=\'draw\'>
+                        <img src=\'pic/xm01.jpg\' alt=\'\'/>魔術師（逆）
+                    </div>
+                    <div class=\'draw\'>
+                        <img src=\'pic/xs08.jpg\' alt=\'\'/>劍八（逆）
+                    </div>
+                    <div class=\'draw\'>
+                        <img src=\'pic/xc06.jpg\' alt=\'\'/>杯六（逆）
+                    </div>
+                </td>
+            </tr>
+            <form>
+                <input type="hidden" name="copy_card" value="愚人（正） 劍三（正） 魔術師（逆） 劍八（逆） 杯六（逆） ">
+            </form>
+            <center>您的編號是: 26774021</center>
+            <script>
+x = document.all.copy_card.createTextRange();
+x.execCommand("Copy");
+</script>
+            <tr>
+                <td>
+                    <div align="center">
+                        <a href="javascript:this.location.reload()" target="_self">
+                            <img src="pic/reload.gif" width="280" height="80" border="0" align="absmiddle">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div align="center" style="color:#AAAAAA;">Ps: 如果您是使用 Internet Explorer, 此網址已經自動置入剪貼簿當中囉!
+            <br />
+將可在軟體中直接使用 Ctrl+V 貼上即可!
+        </div>
+    </body>
+</html>';
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
-        $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
+        $str_number = mb_ereg_replace('<center>您的編號是: ', '', $str_number);
 
-        // $sn = 26713693;
-        // $url_api = "http://tarot.keepfight.net/see.php?sn=".$sn;
-        // $output =  $this->curl->curl_get($url_api);
+        $r = strstr($output, '<input type="hidden" name="copy_card" value="');
+        $r = strstr($r, '</form>',true);
+        $r = str_replace('<input type="hidden" name="copy_card" value="', '', $r);
+        $r = preg_replace('/\s">[\s]*/', '', $r);
+        $r = str_replace('（正）', '(+)', $r);
+        $r = str_replace('（逆）', '(-)', $r);
+        $arr_r = preg_split("/[\s,]+/", $r);
 
-        // $r = strstr($output, '<form>');
-        // $r = strstr($r, '</form>',true);
-        // $r = str_replace('<form><input type="hidden" name="copy_card" value="', '', $r);
-        // $r = str_replace(' ">', '', $r);
-        // $r = str_replace('（正）', '(+)', $r);
-        // $r = str_replace('（逆）', '(-)', $r);
-        // $arr_r = preg_split("/[\s,]+/", $r);
-        // $message = '';
-        // foreach ($arr_r as $key => $value) {
-        //     if(!preg_match("/^N\/A/", $value)) {
-        //         $message.= $value." ";
-        //     }
-        // }
-        return "http://tarot.keepfight.net/see.php?sn=".$str_number;
+        $message = '';
+        foreach ($arr_r as $key => $value) {
+            if(!preg_match("/^N\/A/", $value)) {
+                $message .= $value." ";
+            }
+        }
+        
+        return  $message."\n http://tarot.keepfight.net/see.php?sn=".$str_number;
     }
 }
