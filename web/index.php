@@ -33,7 +33,7 @@ foreach ($client->parseEvents() as $event) {
             switch ($message['type']) {
                 case 'text':
                 	// $m_message = $tarot->is_tarot_message( $message['text'] );
-
+                    $m_message = ' :';
                 	if($m_message != false)
                 	{
                         if($event['source']['type'] != 'user') {
