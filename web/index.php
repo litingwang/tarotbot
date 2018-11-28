@@ -37,7 +37,7 @@ foreach ($client->parseEvents() as $event) {
                 	if($m_message != false)
                 	{
                         if($event['source']['type'] != 'user') {
-                            $user = new user($event['source']['userID'],$channelAccessToken);
+                            $user = new user($event['source']['userId'],$channelAccessToken);
                             $m_message = "@".$user->get_user()."\n";
                         }
                 		$client->replyMessage(array(
