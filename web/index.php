@@ -37,7 +37,7 @@ foreach ($client->parseEvents() as $event) {
                 	{
                         if($event['source']['type'] != 'user') {
                             $user = new user($channelAccessToken);
-                            $m_message = "@".$user->get_user()."\n".$m_message;
+                            $m_message = "@".$user->get_user()."\n";
                         }
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
@@ -71,7 +71,7 @@ class user {
         //$data_url, $data_type,$data_userpwd, $authorization
         $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
         $arr_result = json_decode($output,true);
-        return $arr_result['displayName'];
+        return $output;
     }
 }
 
