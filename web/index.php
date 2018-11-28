@@ -32,13 +32,13 @@ foreach ($client->parseEvents() as $event) {
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                	// $m_message = $tarot->is_tarot_message( $message['text'] );
-                    $m_message = "@";
+                	$m_message = $tarot->is_tarot_message( $message['text'] );
+
                 	if($m_message != false)
                 	{
                         if($event['source']['type'] != 'user') {
                             $user = new user($event['source']['userId'],$channelAccessToken);
-                            $m_message = "@".$user->get_user()."\n";
+                            $m_message = "@".$user->get_user()."\n".$m_message;
                         }
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
