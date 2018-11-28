@@ -68,7 +68,7 @@ class user {
         $this->curl = new Curl();
         $url_api = "https://api.line.me/v2/bot/profile/".$this->userID;
 
-        $data_url, $data_type,$data_userpwd, $authorization
+        //$data_url, $data_type,$data_userpwd, $authorization
         $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
         $arr_result = json_decode($output,true);
         return $arr_result['displayName'];
