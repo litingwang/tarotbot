@@ -36,8 +36,8 @@ foreach ($client->parseEvents() as $event) {
                 	if($m_message != false)
                 	{
                         if($event['source']['type'] != 'user') {
-                            $user = new user;
-                            $m_message = "@".$user->get_user()."\n";
+                            $user = new user($channelAccessToken);
+                            $m_message = "@".$user->get_user['displayName']."\n".$m_message;
                         }
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
@@ -68,10 +68,10 @@ class user {
         $this->curl = new Curl();
         $url_api = "https://api.line.me/v2/bot/profile/".$this->userID;
 
-        //$data_url, $data_type,$data_userpwd, $authorization
-        // $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
-        // $arr_result = json_decode($output,true);
-        return $url_api;
+        $data_url, $data_type,$data_userpwd, $authorization
+        $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
+        $arr_result = json_decode($output,true);
+        return $arr_result['displayName'];
     }
 }
 
