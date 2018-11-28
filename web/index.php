@@ -37,7 +37,7 @@ foreach ($client->parseEvents() as $event) {
                 	{
                         if($event['source']['type'] != 'user') {
                             $user = new user;
-                            $m_message = "@".$user->get_user."\n";
+                            $m_message = "@".$user->get_user()."\n";
                         }
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
