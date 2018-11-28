@@ -37,7 +37,7 @@ foreach ($client->parseEvents() as $event) {
                 	if($m_message != false)
                 	{
                         if($event['source']['type'] != 'user') {
-                            $user = new user($channelAccessToken);
+                            $user = new user($event['source']['userID'],$channelAccessToken);
                             $m_message = "@".$user->get_user()."\n";
                         }
                 		$client->replyMessage(array(
@@ -61,9 +61,10 @@ foreach ($client->parseEvents() as $event) {
 };
 
 class user {
-    public function __construct($userID)
+    public function __construct($userID,$channelAccessToken)
     {
         $this->userID = $userID;
+        $this->channelAccessToken = $channelAccessToken;
     }
     public function get_user() {
         $this->curl = new Curl();
@@ -72,7 +73,7 @@ class user {
         // $data_url, $data_type,$data_userpwd, $authorization
         // $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
         // $arr_result = json_decode($output,true);
-        return $channelAccessToken;
+        return $this->userID.':'.$this->channelAccessToken;
     }
 }
 
