@@ -14,7 +14,7 @@ class Curl {
                 $header = array('Accept: application/json');
                 break;
             case 'auth':
-                $header = array('Accept: application/json','Authorization: Bearer '.$authorization);
+                $header = array('Authorization: Bearer '.$authorization);
                 break;
             default:
                  $header = array('Accept: plain/text');
