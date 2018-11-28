@@ -25,6 +25,7 @@ $channelSecret = getenv('LINE_CHANNEL_SECRET');
 
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
 $tarot = new tarot;
+
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
@@ -34,12 +35,16 @@ foreach ($client->parseEvents() as $event) {
                 	$m_message = $tarot->is_tarot_message( $message['text'] );
                 	if($m_message != false)
                 	{
+                        if($event['source']['type'] != 'user') {
+                            $user = new user;
+                            $m_message = "@".$user->get_user['displayName']."\n".$m_message;
+                        }
                 		$client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
                         'messages' => array(
                             array(
                                 'type' => 'text',
-                                'text' => $event['source']['userId'].':'.$m_message
+                                'text' => $m_message
                             )
                         )
                     	));
@@ -53,6 +58,22 @@ foreach ($client->parseEvents() as $event) {
             break;
     }
 };
+
+class user {
+    public function __construct($userID)
+    {
+        $this->userID = $userID;
+    }
+    public function get_user() {
+        $this->curl = new Curl();
+        $url_api = "https://api.line.me/v2/bot/profile/".$this->userID;
+
+        //$data_url, $data_type,$data_userpwd, $authorization
+        $output = $this->curl->curl_get($url_api,'auth',false,$channelAccessToken);
+        $arr_result = json_decode($output,true);
+        return $arr_result;
+    }
+}
 
 class tarot {
     public function is_tarot_message($message) {

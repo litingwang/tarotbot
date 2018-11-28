@@ -7,13 +7,15 @@
 class Curl {
 
     //call RESTFul API Server using GET method
-    public function curl_get($data_url, $data_type= false,$data_userpwd = false){
+    public function curl_get($data_url, $data_type= false,$data_userpwd = false, $authorization = false){
         $ch = curl_init();
         switch ($data_type) {
             case 'json':
-                 $header = array('Accept: application/json');
+                $header = array('Accept: application/json');
                 break;
-            
+            case 'auth':
+                $header = array('Authorization: Bearer '.$authorization);
+                break;
             default:
                  $header = array('Accept: plain/text');
                 break;
