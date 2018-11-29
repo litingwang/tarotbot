@@ -40,6 +40,16 @@ foreach ($client->parseEvents() as $event) {
                                     )
                                 )
                             ));
+                        } else{
+                            $client->replyMessage(array(
+                                'replyToken' => $event['replyToken'],
+                                'messages' => array(
+                                    array(
+                                        'type' => 'text',
+                                        'text' => $result
+                                    )
+                                )
+                            ));
                         }
 
                     } elseif($m_message != false) {
@@ -90,13 +100,13 @@ class user {
 
     public function bot_leave() {
         if($this->arr_user['type'] == 'room') {
-            $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
-            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
-            return $output;
+            // $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
+            // $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return 'roomId:'.$this->arr_user['roomId'];
         } elseif($this->arr_user['type'] == 'group') {
             $url_api ="https://api.line.me/v2/bot/group/".$this->arr_user['groupId']."/leave";
-            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
-            return $output;
+            // $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return 'groupId:'.$this->arr_user['groupId'];
         }
         return false;
     }
@@ -107,7 +117,7 @@ class tarot {
             $count = (int) substr($message, -1);
             return $this->get_tarot($count);
         } elseif (preg_match('/tarot:help$/', $message)) {
-            $message = "請輸入tarot:1(張數)\n牌數範圍為1~9\n二擇一占卜請輸入tarot:choices\n機器人退出請輸入tarot:bye\n";
+            $message = "請輸入tarot:1(張數)\n牌數範圍為1~9\n二擇一占卜請輸入tarot:choices\n機器人退出請輸入tarot:bye(測試中)\n";
             return $message;
 
         } elseif (preg_match('/tarot:choices$/', $message)) {
