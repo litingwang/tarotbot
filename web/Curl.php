@@ -42,10 +42,14 @@ class Curl {
     }
 
     //Use curl to post json data to Restful/JSON RPC API Server
-    public function curl_post($data_url, $json_output,$data_userpwd = false){
+    public function curl_post($data_url, $json_output,$data_userpwd = false,$authorization = false){
         $ch = curl_init();
 
-        $header = array('Content-type: application/json', 'Accept: application/json', 'Content-Length: ' . strlen($json_output));
+        if($authorization){
+            $header = array('Authorization: Bearer '.$authorization);
+        } else {
+            $header = array('Content-type: application/json', 'Accept: application/json', 'Content-Length: ' . strlen($json_output));
+        }
 
         curl_setopt($ch,CURLOPT_URL,$data_url);         
         curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'POST');

@@ -27,8 +27,21 @@ foreach ($client->parseEvents() as $event) {
             switch ($message['type']) {
                 case 'text':
                     $m_message = $tarot->is_tarot_message( $message['text'] );
-                    if($m_message != false)
-                    {
+                    if ($m_message == 'exit') {
+                        $user = new user($event['source'],$channelAccessToken);
+                        $client->replyMessage(array(
+                            'replyToken' => $event['replyToken'],
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => 'byebye'
+                                )
+                            )
+                        ));
+
+                        $user->bot_leave();
+
+                    } elseif($m_message != false) {
                         if($event['source']['type'] != 'user') {
                             $user = new user($event['source'],$channelAccessToken);
                             $m_message = '@'.$user->get_user()."\n".$m_message;
@@ -73,6 +86,15 @@ class user {
         $arr_result = json_decode($output,true);
         return $arr_result['displayName'];
     }
+
+    public function bot_leave() {
+        if($this->arr_user['type'] == 'room') {
+            $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
+            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return true;
+        }
+        return false;
+    }
 }
 class tarot {
     public function is_tarot_message($message) {
@@ -82,10 +104,14 @@ class tarot {
         } elseif (preg_match('/tarot:help$/', $message)) {
             $message = "請輸入tarot:1(張數)\n牌數範圍為1~9\n二擇一占卜請輸入tarot:choices";
             return $message;
-        } elseif(preg_match('/tarot:choices$/', $message)) {
+
+        } elseif (preg_match('/tarot:choices$/', $message)) {
             return $this->get_choices();
-        }
-         else {
+
+        } elseif (preg_match('/tarot:bye$/', $message)) {
+            return 'exit';
+
+        } else {
             return false;
         }
     }
