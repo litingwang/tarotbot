@@ -1,6 +1,5 @@
 <?php
-
-/**
+/**tarot: 1
  * Copyright 2016 LINE Corporation
  *
  * LINE Corporation licenses this file to you under the Apache License,
@@ -15,32 +14,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
 require_once('./LINEBotTiny.php');
 require_once('./Curl.php');
-
-
 $channelAccessToken = getenv('LINE_CHANNEL_ACCESSTOKEN');
 $channelSecret = getenv('LINE_CHANNEL_SECRET');
-
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
 $tarot = new tarot;
-
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                	// $m_message = $tarot->is_tarot_message( $message['text'] );
-                    $m_message = "@";
-                	if($m_message != false)
-                	{
+                    // $m_message = $tarot->is_tarot_message( $message['text'] );
+                    $m_message = ' :';
+                    if($m_message != false)
+                    {
                         if($event['source']['type'] != 'user') {
                             $user = new user($event['source']['userId'],$channelAccessToken);
-                            $m_message = "@".$user->get_user()."\n";
+                            $m_message = $user->get_user()."\n";
                         }
-                		$client->replyMessage(array(
+                        $client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
                         'messages' => array(
                             array(
@@ -48,8 +42,8 @@ foreach ($client->parseEvents() as $event) {
                                 'text' => $m_message
                             )
                         )
-                    	));
-                	}
+                        ));
+                    }
                     break;
                 
             }
@@ -59,7 +53,6 @@ foreach ($client->parseEvents() as $event) {
             break;
     }
 };
-
 class user {
     public function __construct($userID,$channelAccessToken)
     {
@@ -69,19 +62,16 @@ class user {
     public function get_user() {
         $this->curl = new Curl();
         $url_api = "https://api.line.me/v2/bot/profile/".$this->userID;
-
-        // $data_url, $data_type,$data_userpwd, $authorization
+        //$data_url, $data_type,$data_userpwd, $authorization
         $output = $this->curl->curl_get($url_api,'auth',false,$this->channelAccessToken);
         $arr_result = json_decode($output,true);
-        return $output;
+        return $this->userID.' displayName:'.$arr_result['displayName'];
     }
 }
-
 class tarot {
     public function is_tarot_message($message) {
         if(preg_match('/tarot:[1-9]$/', $message) ) {
             $count = (int) substr($message, -1);
-
             return $this->get_tarot($count);
         } elseif (preg_match('/tarot:help$/', $message)) {
             $message = "請輸入tarot:1(張數)\n牌數範圍為1~9\n二擇一占卜請輸入tarot:choices";
@@ -93,16 +83,13 @@ class tarot {
             return false;
         }
     }
-
     public function get_tarot($count) {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
         $output = $this->curl->curl_get($url_api);
-
         $str_number = strstr($output, '<center>');
         $str_number = strstr($str_number, '</center>',true);
         $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
-
         $r = strstr($output, '<input type="hidden" name="copy_card" value="');
         $r = strstr($r, '</form>',true);
         $r = str_replace('<input type="hidden" name="copy_card" value="', '', $r);
@@ -110,30 +97,25 @@ class tarot {
         $r = str_replace('（正）', '(+)', $r);
         $r = str_replace('（逆）', '(-)', $r);
         $arr_r = preg_split("/[\s,]+/", $r);
-
         $message = '';
         $card_count = 1;
         foreach ($arr_r as $key => $value) {
             if (!preg_match("/^N\/A/", $value)) {
-
                 if($count <= 3) {
                     $message .= $card_count .": ".$value." ";
                 } else {
                     $message .= $card_count .": ".$value." \n";
                 }
-
                 $card_count = $card_count+1;
             }
         }
         
         return  $message." \nhttp://tarot.keepfight.net/see.php?sn=".$str_number;
     }
-
     public function get_choices() {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=5";
         $output = $this->curl->curl_get($url_api);
-
         $r = strstr($output, '<input type="hidden" name="copy_card" value="');
         $r = strstr($r, '</form>',true);
         $r = str_replace('<input type="hidden" name="copy_card" value="', '', $r);
@@ -148,7 +130,6 @@ class tarot {
             'B 的前期狀況：',
             'B 的結果：'
         );
-
         $message = '';
         $card_count = 0;
         foreach ($arr_r as $key => $value) {
