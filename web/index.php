@@ -26,13 +26,12 @@ foreach ($client->parseEvents() as $event) {
             $message = $event['message'];
             switch ($message['type']) {
                 case 'text':
-                    // $m_message = $tarot->is_tarot_message( $message['text'] );
-                    $m_message = ' :';
+                    $m_message = $tarot->is_tarot_message( $message['text'] );
                     if($m_message != false)
                     {
                         if($event['source']['type'] != 'user') {
                             $user = new user($event['source'],$channelAccessToken);
-                            $m_message = $user->get_user()."\n";
+                            $m_message = '@'.$user->get_user()."\n".$m_message;
                         }
                         $client->replyMessage(array(
                         'replyToken' => $event['replyToken'],
@@ -72,7 +71,7 @@ class user {
         //$data_url, $data_type,$data_userpwd, $authorization
         $output = $this->curl->curl_get($url_api,'auth',false,$this->channelAccessToken);
         $arr_result = json_decode($output,true);
-        return $output;
+        return $arr_result['displayName'];
     }
 }
 class tarot {
