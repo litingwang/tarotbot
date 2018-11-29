@@ -123,6 +123,9 @@ class tarot {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=5";
         $output = $this->curl->curl_get($url_api);
+        $str_number = strstr($output, '<center>');
+        $str_number = strstr($str_number, '</center>',true);
+        $str_number = preg_replace('/<center>您的編號是:\s/', '', $str_number);
         $r = strstr($output, '<input type="hidden" name="copy_card" value="');
         $r = strstr($r, '</form>',true);
         $r = str_replace('<input type="hidden" name="copy_card" value="', '', $r);
@@ -148,6 +151,6 @@ class tarot {
                 $card_count = $card_count+1;
             }
         }
-        return $message;
+        return $message." \nhttp://tarot.keepfight.net/see.php?sn=".$str_number;
     }
 }
