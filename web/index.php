@@ -100,13 +100,13 @@ class user {
 
     public function bot_leave() {
         if($this->arr_user['type'] == 'room') {
-            // $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
-            // $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
-            return 'roomId:'.$this->arr_user['roomId'];
+            $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
+            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return $output;
         } elseif($this->arr_user['type'] == 'group') {
             $url_api ="https://api.line.me/v2/bot/group/".$this->arr_user['groupId']."/leave";
-            // $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
-            return 'groupId:'.$this->arr_user['groupId'];
+            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return $output;
         }
         return false;
     }
