@@ -29,16 +29,6 @@ foreach ($client->parseEvents() as $event) {
                     $m_message = $tarot->is_tarot_message( $message['text'] );
                     if ($m_message == 'exit') {
                         $user = new user($event['source'],$channelAccessToken);
-                        $client->replyMessage(array(
-                            'replyToken' => $event['replyToken'],
-                            'messages' => array(
-                                array(
-                                    'type' => 'text',
-                                    'text' => 'byebye'
-                                )
-                            )
-                        ));
-
                         $user->bot_leave();
 
                     } elseif($m_message != false) {
@@ -90,6 +80,10 @@ class user {
     public function bot_leave() {
         if($this->arr_user['type'] == 'room') {
             $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
+            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            return true;
+        } elseif($this->arr_user['type'] == 'group') {
+            $url_api ="https://api.line.me/v2/bot/group/".$this->arr_user['groupId']."/leave";
             $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
             return true;
         }
