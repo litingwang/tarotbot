@@ -31,7 +31,7 @@ foreach ($client->parseEvents() as $event) {
                     if($m_message != false)
                     {
                         if($event['source']['type'] != 'user') {
-                            $user = new user($event['source']['userId'],$channelAccessToken);
+                            $user = new user($event['source'],$channelAccessToken);
                             $m_message = $user->get_user()."\n";
                         }
                         $client->replyMessage(array(
@@ -54,18 +54,25 @@ foreach ($client->parseEvents() as $event) {
     }
 };
 class user {
-    public function __construct($userID,$channelAccessToken)
+    public function __construct($arr_user,$channelAccessToken)
     {
-        $this->userID = $userID;
+        $this->arr_user = $arr_user;
         $this->channelAccessToken = $channelAccessToken;
     }
+
     public function get_user() {
+        if($this->arr_user['type'] == 'group'){
+            $url_api = "https://api.line.me/v2/bot/group/".$this->arr_user['groupId']."/member/".$this->arr_user['userId'];
+
+        } else {
+            $url_api = "https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/member/".$this->arr_user['userId'];
+        }
         $this->curl = new Curl();
-        $url_api = "https://api.line.me/v2/bot/profile/".$this->userID;
+
         //$data_url, $data_type,$data_userpwd, $authorization
         $output = $this->curl->curl_get($url_api,'auth',false,$this->channelAccessToken);
         $arr_result = json_decode($output,true);
-        return $this->userID.' displayName:'.$arr_result['displayName'];
+        return $output;
     }
 }
 class tarot {
@@ -83,6 +90,7 @@ class tarot {
             return false;
         }
     }
+
     public function get_tarot($count) {
         $this->curl = new Curl();
         $url_api = "http://www.tarot.keepfight.net/card.php?d=".$count;
