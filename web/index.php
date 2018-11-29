@@ -29,7 +29,7 @@ foreach ($client->parseEvents() as $event) {
                     $m_message = $tarot->is_tarot_message( $message['text'] );
                     if ($m_message == 'exit') {
                         $user = new user($event['source'],$channelAccessToken);
-                        $result = $user->bot_leave();
+                        $result = $user->bot_leave($channelSecret);
                         if($result == false){
                             $client->replyMessage(array(
                                 'replyToken' => $event['replyToken'],
@@ -98,14 +98,18 @@ class user {
         return $arr_result['displayName'];
     }
 
-    public function bot_leave() {
+    public function bot_leave($channelSecret) {
         if($this->arr_user['type'] == 'room') {
             $url_api ="https://api.line.me/v2/bot/room/".$this->arr_user['roomId']."/leave";
-            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+
+            $json_output = json_encode(array('channelSecret' => $channelSecret));
+
+            $output = $this->curl->curl_post($url_api,$json_output,false,$this->channelAccessToken); //$data_url, $json_output,$data_userpwd = false,$authorization = false
             return $output;
         } elseif($this->arr_user['type'] == 'group') {
             $url_api ="https://api.line.me/v2/bot/group/".$this->arr_user['groupId']."/leave";
-            $output = $this->curl->curl_post($url_api,'auth',false,$this->channelAccessToken);
+            $json_output = json_encode(array('channelSecret' => $channelSecret));
+            $output = $this->curl->curl_post($url_api,$json_output,false,$this->channelAccessToken);
             return $output;
         }
         return false;
